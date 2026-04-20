@@ -15,6 +15,23 @@
 
         <p class="mt-4 text-sm leading-relaxed">{{ event.aprasymas }}</p>
 
+        <div class="mt-5" v-if="eventNuotraukos.length">
+          <h3 class="text-base font-semibold">Renginio nuotraukos</h3>
+          <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+            <a
+              v-for="(p, idx) in eventNuotraukos"
+              :key="idx + '-' + p"
+              :href="storageUrl(p)"
+              target="_blank"
+              rel="noreferrer"
+              class="overflow-hidden rounded-2xl border"
+              :style="{ borderColor: 'var(--border)' }"
+            >
+              <img :src="storageUrl(p)" class="h-32 w-full object-cover" alt="" loading="lazy" />
+            </a>
+          </div>
+        </div>
+
         <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
           <div class="card card-flat">
             <div class="muted text-xs font-medium">Adresas</div>
@@ -61,7 +78,7 @@
                 class="photoBtn"
                 @click="openGallery(idx)"
               >
-                <img :src="n.url" alt="Nuotrauka" />
+                <img :src="storageUrl(n.url ?? n.kelias)" alt="Nuotrauka" />
               </button>
             </div>
             <p v-else class="muted mt-2 text-sm">Nuotraukų dar nėra.</p>
@@ -168,6 +185,7 @@
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import EventMap from '../EventMap.vue';
+import { storageUrl, normalizeStoragePaths } from '../utils/storageUrl.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -203,7 +221,11 @@ const myPendingMessage = ref('');
 
 const galleryOpen = ref(false);
 const galleryIndex = ref(0);
-const galleryUrls = computed(() => (atsiliepimai.value.nuotraukos ?? []).map(n => n.url));
+const galleryUrls = computed(() =>
+  (atsiliepimai.value.nuotraukos ?? []).map((n) => storageUrl(n.url ?? n.kelias ?? '')),
+);
+
+const eventNuotraukos = computed(() => normalizeStoragePaths(event.value?.nuotraukos));
 
 const isAuthenticated = computed(() => !!localStorage.getItem('token'));
 

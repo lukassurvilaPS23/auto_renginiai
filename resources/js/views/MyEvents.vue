@@ -94,11 +94,19 @@
         <input class="input mt-2" type="file" accept="image/*" multiple @change="onPhotosSelected" />
         <p class="muted mt-2 text-xs">Jei redaguojant pasirinksi nuotraukas iš naujo — jos pakeis senas.</p>
 
-        <div v-if="Array.isArray(form.nuotraukos) && form.nuotraukos.length" class="mt-3">
+        <div v-if="existingPhotoPaths.length" class="mt-3">
           <div class="muted text-xs font-medium">Esamos nuotraukos</div>
-          <div class="mt-2 flex flex-wrap gap-2">
-            <a v-for="p in form.nuotraukos" :key="p" class="link text-xs" :href="`/storage/${p}`" target="_blank" rel="noreferrer">
-              Atidaryti
+          <div class="mt-2 flex flex-wrap gap-3">
+            <a
+              v-for="(p, i) in existingPhotoPaths"
+              :key="`${p}-${i}`"
+              class="block overflow-hidden rounded-xl border"
+              :style="{ borderColor: 'var(--border)' }"
+              :href="storageUrl(p)"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img :src="storageUrl(p)" alt="" class="h-20 w-28 object-cover" loading="lazy" />
             </a>
           </div>
         </div>
@@ -155,7 +163,7 @@
                   <div v-if="Array.isArray(x.nuotraukos) && x.nuotraukos.length" class="mt-2">
                     <b>Nuotraukos:</b>
                     <div class="mt-2 flex flex-wrap gap-2">
-                      <a v-for="p in x.nuotraukos" class="link" :key="p" :href="`/storage/${p}`" target="_blank" rel="noreferrer">Atidaryti</a>
+                      <a v-for="(p, i) in normalizeStoragePaths(x.nuotraukos)" class="link" :key="`${p}-${i}`" :href="storageUrl(p)" target="_blank" rel="noreferrer">Atidaryti</a>
                     </div>
                   </div>
                 </div>
@@ -210,9 +218,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import EventMap from '../EventMap.vue';
+import { storageUrl, normalizeStoragePaths } from '../utils/storageUrl.js';
+
+const existingPhotoPaths = computed(() => normalizeStoragePaths(form.value?.nuotraukos));
 
 const router = useRouter();
 const loading = ref(true);

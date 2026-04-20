@@ -19,5 +19,6 @@ cmds = [
 ]
 
 [start]
-cmd = "php -S 0.0.0.0:${PORT} -t public"
+# Use Laravel-style router so missing static files reach index.php (storage symlink, etc.)
+cmd = "cd public && php -S 0.0.0.0:${PORT} server.php"
 

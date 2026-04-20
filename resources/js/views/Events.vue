@@ -56,11 +56,20 @@
         <div class="divide-y" :style="{ borderColor: 'var(--border)' }">
           <div v-for="r in list" :key="r.id" class="py-4">
             <div class="flex items-start justify-between gap-4">
-              <div class="min-w-0">
-                <a :href="`/renginiai/${r.id}`" class="link text-base sm:text-lg">
-                  {{ r.pavadinimas }}
-                </a>
-                <p class="mt-1 text-sm muted">{{ r.miestas }} · {{ formatDate(r.pradzios_data) }}</p>
+              <div class="flex min-w-0 flex-1 items-start gap-3">
+                <div
+                  v-if="eventListThumb(r)"
+                  class="h-14 w-14 shrink-0 overflow-hidden rounded-xl border"
+                  :style="{ borderColor: 'var(--border)' }"
+                >
+                  <img :src="eventListThumb(r)" alt="" class="h-full w-full object-cover" loading="lazy" />
+                </div>
+                <div class="min-w-0">
+                  <a :href="`/renginiai/${r.id}`" class="link text-base sm:text-lg">
+                    {{ r.pavadinimas }}
+                  </a>
+                  <p class="mt-1 text-sm muted">{{ r.miestas }} · {{ formatDate(r.pradzios_data) }}</p>
+                </div>
               </div>
               <span class="badge" :class="statusBadgeClass(r)">{{ statusLabel(r) }}</span>
             </div>
@@ -76,6 +85,13 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { storageUrl, normalizeStoragePaths } from '../utils/storageUrl.js';
+
+function eventListThumb(r) {
+  const paths = normalizeStoragePaths(r?.nuotraukos);
+  const p = paths[0];
+  return p ? storageUrl(p) : '';
+}
 
 const filters = ref({
   pavadinimas: '',
