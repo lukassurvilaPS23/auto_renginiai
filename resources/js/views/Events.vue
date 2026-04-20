@@ -18,7 +18,7 @@
         <div>
           <label class="label">Statusas</label>
           <select v-model="filters.statusas" class="select mt-2">
-            <option value="">Aktyvūs (numatyta)</option>
+            <option value="visi">Visi (numatyta)</option>
             <option value="aktyvus">Aktyvūs</option>
             <option value="pasibaiges">Pasibaigę</option>
             <option value="atsauktas">Atšaukti</option>
@@ -62,6 +62,7 @@
                 </a>
                 <p class="mt-1 text-sm muted">{{ r.miestas }} · {{ formatDate(r.pradzios_data) }}</p>
               </div>
+              <span class="badge" :class="statusBadgeClass(r)">{{ statusLabel(r) }}</span>
             </div>
             <p class="mt-3 text-sm leading-relaxed" :style="{ color: 'var(--text)' }">
               {{ r.aprasymas }}
@@ -79,7 +80,7 @@ import { ref, onMounted } from 'vue';
 const filters = ref({
   pavadinimas: '',
   miestas: '',
-  statusas: '',
+  statusas: 'visi',
   sort: 'pradzios_data:desc',
   pradzios_nuo: '',
   pradzios_iki: '',
@@ -94,7 +95,7 @@ async function load() {
   const qs = new URLSearchParams();
   if (filters.value.pavadinimas) qs.set('pavadinimas', filters.value.pavadinimas);
   if (filters.value.miestas) qs.set('miestas', filters.value.miestas);
-  if (filters.value.statusas) qs.set('statusas', filters.value.statusas);
+  if (filters.value.statusas && filters.value.statusas !== 'visi') qs.set('statusas', filters.value.statusas);
   if (filters.value.pradzios_nuo) qs.set('pradzios_nuo', filters.value.pradzios_nuo);
   if (filters.value.pradzios_iki) qs.set('pradzios_iki', filters.value.pradzios_iki);
 
@@ -117,6 +118,27 @@ function formatDate(value) {
   if (Number.isNaN(date.getTime())) return value;
   const pad = (n) => String(n).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function isEnded(r) {
+  const end = r.pabaigos_data || r.pradzios_data;
+  if (!end) return false;
+  const d = new Date(end);
+  if (Number.isNaN(d.getTime())) return false;
+  return d.getTime() < Date.now();
+}
+
+function statusLabel(r) {
+  if (r.statusas === 'atsauktas') return 'atšauktas';
+  if (isEnded(r)) return 'pasibaigęs';
+  if (r.statusas) return String(r.statusas);
+  return 'aktyvus';
+}
+
+function statusBadgeClass(r) {
+  if (r.statusas === 'atsauktas') return 'badge-warning';
+  if (isEnded(r)) return 'badge-danger';
+  return 'badge-success';
 }
 </script>
 

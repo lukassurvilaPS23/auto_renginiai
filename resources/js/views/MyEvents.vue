@@ -89,6 +89,21 @@
         />
       </div>
 
+      <div class="mt-5">
+        <label class="label">Renginio nuotraukos (iki 5)</label>
+        <input class="input mt-2" type="file" accept="image/*" multiple @change="onPhotosSelected" />
+        <p class="muted mt-2 text-xs">Jei redaguojant pasirinksi nuotraukas iš naujo — jos pakeis senas.</p>
+
+        <div v-if="Array.isArray(form.nuotraukos) && form.nuotraukos.length" class="mt-3">
+          <div class="muted text-xs font-medium">Esamos nuotraukos</div>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <a v-for="p in form.nuotraukos" :key="p" class="link text-xs" :href="`/storage/${p}`" target="_blank" rel="noreferrer">
+              Atidaryti
+            </a>
+          </div>
+        </div>
+      </div>
+
       <div class="mt-5 flex flex-wrap gap-2">
         <button class="btn btn-primary" type="button" @click="save">Saugoti</button>
         <button class="btn" type="button" @click="clearForm">Išvalyti formą</button>
@@ -212,8 +227,10 @@ const form = ref({
   latitude: 54.6872,
   longitude: 25.2797,
   zemelapio_objektai: null,
+  nuotraukos: [],
 });
 const registracijos = ref({ show: false, pavad: '', list: [], loading: false });
+const selectedPhotos = ref([]);
 
 onMounted(async () => {
   const token = localStorage.getItem('token');
@@ -273,7 +290,9 @@ function clearForm() {
     latitude: 54.6872,
     longitude: 25.2797,
     zemelapio_objektai: null,
+    nuotraukos: [],
   };
+  selectedPhotos.value = [];
 }
 
 function edit(r) {
@@ -287,7 +306,14 @@ function edit(r) {
   form.value.latitude = Number(r.latitude ?? 54.6872);
   form.value.longitude = Number(r.longitude ?? 25.2797);
   form.value.zemelapio_objektai = r.zemelapio_objektai ?? null;
+  form.value.nuotraukos = Array.isArray(r.nuotraukos) ? r.nuotraukos : [];
+  selectedPhotos.value = [];
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function onPhotosSelected(e) {
+  const files = Array.from(e?.target?.files || []);
+  selectedPhotos.value = files.slice(0, 5);
 }
 
 async function del(id) {
@@ -313,13 +339,36 @@ async function save() {
   const token = localStorage.getItem('token');
   const data = { ...form.value };
   delete data.editId;
+  delete data.nuotraukos;
   if (!data.pavadinimas || !data.miestas || !data.pradzios_data) {
     alert('Reikia: pavadinimas, miestas, pradžios data');
     return;
   }
   const url = form.value.editId ? `/api/auto-renginiai/${form.value.editId}` : '/api/auto-renginiai';
   const method = form.value.editId ? 'PUT' : 'POST';
-  const res = await fetch(url, {
+  const hasPhotos = Array.isArray(selectedPhotos.value) && selectedPhotos.value.length > 0;
+  const res = await fetch(url, hasPhotos ? {
+    method,
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: (() => {
+      const fd = new FormData();
+      for (const [k, v] of Object.entries(data)) {
+        if (v === undefined || v === null) continue;
+        if (k === 'zemelapio_objektai') {
+          fd.set(k, JSON.stringify(v));
+        } else {
+          fd.set(k, String(v));
+        }
+      }
+      for (const f of selectedPhotos.value.slice(0, 5)) {
+        fd.append('nuotraukos[]', f);
+      }
+      return fd;
+    })(),
+  } : {
     method,
     headers: {
       Accept: 'application/json',

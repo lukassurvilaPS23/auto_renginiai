@@ -34,7 +34,14 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Auto renginiai
-Route::get('/auto-renginiai/export.xml', [AutoRenginiaiController::class, 'exportXml']);
+Route::middleware('auth:sanctum')->get('/auto-renginiai/export.xml', function () {
+    $user = request()->user();
+    if (!$user || !$user->hasRole('administratorius')) {
+        return response()->json(['zinute' => 'Neturite teisių.'], 403);
+    }
+
+    return app(\App\Http\Controllers\AutoRenginiaiController::class)->exportXml();
+});
 
 Route::get('/auto-renginiai', [AutoRenginiaiController::class, 'index']);
 Route::get('/auto-renginiai/{autoRenginys}', [AutoRenginiaiController::class, 'show']);

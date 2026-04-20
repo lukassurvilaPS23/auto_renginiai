@@ -11,8 +11,8 @@
             <a href="/garazas" class="btn btn-ghost">Garažas</a>
             <a href="/profilis" class="btn btn-ghost">Profilis</a>
             <a v-if="isAdmin" href="/admin" class="btn btn-ghost">Admin</a>
-            <a href="/xml" target="_blank" rel="noreferrer" class="btn btn-ghost">XML</a>
-            <a href="/swagger" target="_blank" rel="noreferrer" class="btn btn-ghost">Swagger</a>
+            <a v-if="isAdmin" href="/xml" class="btn btn-ghost">XML</a>
+            <a v-if="isAdmin" href="/swagger" class="btn btn-ghost">Swagger</a>
           </nav>
 
           <div class="ml-auto flex items-center gap-2">

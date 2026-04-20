@@ -172,6 +172,24 @@ body {
         @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium;
     }
 
+    .badge-success {
+        background: color-mix(in srgb, #16a34a 12%, transparent);
+        color: #16a34a;
+        border: 1px solid color-mix(in srgb, #16a34a 28%, transparent);
+    }
+
+    .badge-danger {
+        background: color-mix(in srgb, var(--danger) 12%, transparent);
+        color: var(--danger);
+        border: 1px solid color-mix(in srgb, var(--danger) 28%, transparent);
+    }
+
+    .badge-warning {
+        background: color-mix(in srgb, #f59e0b 12%, transparent);
+        color: #b45309;
+        border: 1px solid color-mix(in srgb, #f59e0b 28%, transparent);
+    }
+
     .alert {
         border: 1px solid var(--border);
         background: var(--surface);

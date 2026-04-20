@@ -14,6 +14,8 @@ import Login from './views/Login.vue';
 import Register from './views/Register.vue';
 import CarDetail from './views/CarDetail.vue';
 import Admin from './views/Admin.vue';
+import XmlExport from './views/XmlExport.vue';
+import SwaggerRedirect from './views/SwaggerRedirect.vue';
 
 const routes = [
     { path: '/', component: Home },
@@ -26,6 +28,8 @@ const routes = [
     { path: '/garazas', component: Garage, meta: { requiresAuth: true } },
     { path: '/automobiliai/:id', component: CarDetail, props: true, meta: { requiresAuth: true } },
     { path: '/admin', component: Admin, meta: { requiresAuth: true } },
+    { path: '/xml', component: XmlExport, meta: { requiresAuth: true } },
+    { path: '/swagger', component: SwaggerRedirect, meta: { requiresAuth: true } },
     { path: '/prisijungti', component: Login },
     { path: '/registruotis', component: Register },
 ];

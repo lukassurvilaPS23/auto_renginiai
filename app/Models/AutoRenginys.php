@@ -21,6 +21,7 @@ class AutoRenginys extends Model
         'latitude',
         'longitude',
         'zemelapio_objektai',
+        'nuotraukos',
         'statusas',
         'organizatorius_id',
     ];
@@ -29,6 +30,7 @@ class AutoRenginys extends Model
         'pradzios_data' => 'datetime',
         'pabaigos_data' => 'datetime',
         'zemelapio_objektai' => 'array',
+        'nuotraukos' => 'array',
     ];
 
     public function organizatorius()

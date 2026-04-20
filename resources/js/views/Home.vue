@@ -23,8 +23,8 @@
           <li><a class="link" href="/renginiai">Renginių sąrašas</a></li>
           <li><a class="link" href="/prisijungti">Prisijungti</a></li>
           <li><a class="link" href="/registruotis">Registruotis</a></li>
-          <li><a class="link" href="/xml" target="_blank" rel="noreferrer">XML eksportas</a></li>
-          <li><a class="link" href="/swagger" target="_blank" rel="noreferrer">Swagger dokumentacija</a></li>
+          <li v-if="isAdmin"><a class="link" href="/xml">XML eksportas</a></li>
+          <li v-if="isAdmin"><a class="link" href="/swagger">Swagger dokumentacija</a></li>
         </ul>
       </div>
       <div class="card card-flat">
@@ -80,15 +80,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const events = ref([]);
 const allEvents = ref([]);
 const loading = ref(true);
 const calendarDate = ref(new Date());
 const weekdays = ['Pr', 'An', 'Tr', 'Kt', 'Pn', 'Št', 'Sk'];
+const roles = ref([]);
+
+const isAdmin = computed(() => roles.value.includes('administratorius'));
 
 onMounted(async () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const meRes = await fetch('/api/as', {
+      headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
+    });
+    if (meRes.ok) {
+      const me = await meRes.json();
+      roles.value = Array.isArray(me.roles) ? me.roles : [];
+    } else {
+      roles.value = [];
+    }
+  }
+
   const res = await fetch('/api/auto-renginiai', {
     headers: { Accept: 'application/json' },
   });

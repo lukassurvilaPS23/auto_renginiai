@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AutoRenginys;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use OpenApi\Annotations as OA;
 
 class AutoRenginiaiController extends Controller
@@ -41,7 +42,7 @@ class AutoRenginiaiController extends Controller
             $q->where('miestas', 'like', '%' . $request->query('miestas') . '%');
         }
 
-        if ($request->filled('statusas')) {
+        if ($request->filled('statusas') && $request->query('statusas') !== 'visi') {
             $status = $request->query('statusas');
             if ($status === 'pasibaiges') {
                 $q->where(function ($q2) {
@@ -60,12 +61,6 @@ class AutoRenginiaiController extends Controller
             } else {
                 $q->where('statusas', $status);
             }
-        } else {
-            $q->where('statusas', 'aktyvus')
-               ->where(function ($q2) {
-                   $q2->where('pabaigos_data', '>=', Carbon::now())
-                      ->orWhereNull('pabaigos_data');
-               });
         }
 
         if ($request->filled('pradzios_nuo')) {
@@ -152,6 +147,14 @@ class AutoRenginiaiController extends Controller
             return response()->json(['zinute' => 'Neturite teisių.'], 403);
         }
 
+        $rawMap = $request->input('zemelapio_objektai');
+        if (is_string($rawMap) && $rawMap !== '') {
+            $decoded = json_decode($rawMap, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $request->merge(['zemelapio_objektai' => $decoded]);
+            }
+        }
+
         $data = $request->validate([
             'pavadinimas' => 'required|string|max:255',
             'aprasymas' => 'nullable|string',
@@ -162,9 +165,20 @@ class AutoRenginiaiController extends Controller
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
             'zemelapio_objektai' => 'nullable|array',
+            'nuotraukos' => 'nullable|array|max:5',
+            'nuotraukos.*' => 'file|image|max:5120',
         ]);
 
         $data['organizatorius_id'] = $request->user()->id;
+
+        $photoPaths = [];
+        $photos = $request->file('nuotraukos', []);
+        foreach ($photos as $file) {
+            $photoPaths[] = Storage::disk('public')->put('renginiu-nuotraukos', $file);
+        }
+        if (count($photoPaths)) {
+            $data['nuotraukos'] = $photoPaths;
+        }
 
         $autoRenginys = AutoRenginys::create($data);
 
@@ -212,6 +226,14 @@ class AutoRenginiaiController extends Controller
             return response()->json(['zinute' => 'Neturite teisių.'], 403);
         }
 
+        $rawMap = $request->input('zemelapio_objektai');
+        if (is_string($rawMap) && $rawMap !== '') {
+            $decoded = json_decode($rawMap, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $request->merge(['zemelapio_objektai' => $decoded]);
+            }
+        }
+
         $data = $request->validate([
             'pavadinimas' => 'sometimes|string|max:255',
             'aprasymas' => 'sometimes|nullable|string',
@@ -223,7 +245,25 @@ class AutoRenginiaiController extends Controller
             'longitude' => 'sometimes|nullable|numeric|between:-180,180',
             'zemelapio_objektai' => 'sometimes|nullable|array',
             'statusas' => 'sometimes|string|max:50',
+            'nuotraukos' => 'sometimes|nullable|array|max:5',
+            'nuotraukos.*' => 'file|image|max:5120',
         ]);
+
+        $photos = $request->file('nuotraukos', null);
+        if (is_array($photos) && count($photos)) {
+            $existing = is_array($autoRenginys->nuotraukos) ? $autoRenginys->nuotraukos : [];
+            foreach ($existing as $p) {
+                if (!empty($p)) {
+                    Storage::disk('public')->delete($p);
+                }
+            }
+
+            $photoPaths = [];
+            foreach ($photos as $file) {
+                $photoPaths[] = Storage::disk('public')->put('renginiu-nuotraukos', $file);
+            }
+            $data['nuotraukos'] = $photoPaths;
+        }
 
         $autoRenginys->update($data);
 
