@@ -33,6 +33,15 @@ const router = useRouter();
 const form = ref({ el_pastas: '', slaptazodis: '' });
 const error = ref('');
 
+function pickFirstValidationError(errors) {
+  if (!errors || typeof errors !== 'object') return '';
+  const firstKey = Object.keys(errors)[0];
+  const firstVal = firstKey ? errors[firstKey] : null;
+  if (Array.isArray(firstVal) && firstVal.length > 0) return String(firstVal[0]);
+  if (typeof firstVal === 'string') return firstVal;
+  return '';
+}
+
 async function submit() {
   error.value = '';
   const res = await fetch('/api/prisijungti', {
@@ -45,7 +54,7 @@ async function submit() {
   });
   const data = await res.json();
   if (!res.ok) {
-    error.value = data.message || 'Klaida';
+    error.value = pickFirstValidationError(data.errors) || data.zinute || data.message || 'Klaida';
     return;
   }
   localStorage.setItem('token', data.token);
