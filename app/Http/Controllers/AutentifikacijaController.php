@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\ValidationException;
 use OpenApi\Annotations as OA;
@@ -259,5 +261,64 @@ class AutentifikacijaController extends Controller
             'nuotraukos' => $nuotraukos,
             'renginiai' => $renginiai,
         ], 200);
+    }
+
+    public function siustiSlaptazodzioNuoroda(Request $request)
+    {
+        $request->validate([
+            'el_pastas' => 'required|email',
+        ]);
+
+        $status = Password::sendResetLink([
+            'email' => $request->el_pastas,
+        ]);
+
+        $zinute = 'Jei šis el. paštas registruotas, išsiuntėme slaptažodžio atkūrimo nuorodą.';
+
+        if ($status === Password::RESET_THROTTLED) {
+            return response()->json([
+                'zinute' => 'Per daug užklausų. Palaukite minutę ir bandykite dar kartą.',
+            ], 429);
+        }
+
+        return response()->json(['zinute' => $zinute], 200);
+    }
+
+    public function nustatytiSlaptazodiIsNuorodos(Request $request)
+    {
+        $data = $request->validate([
+            'el_pastas' => 'required|email',
+            'token' => 'required|string',
+            'slaptazodis' => 'required|string|min:6|confirmed',
+        ]);
+
+        $status = Password::reset(
+            [
+                'email' => $data['el_pastas'],
+                'password' => $data['slaptazodis'],
+                'password_confirmation' => $data['slaptazodis_confirmation'],
+                'token' => $data['token'],
+            ],
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => $password,
+                    'remember_token' => Str::random(60),
+                ])->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json([
+                'zinute' => 'Slaptažodis pakeistas. Galite prisijungti.',
+            ], 200);
+        }
+
+        $klaidos = match ($status) {
+            Password::INVALID_TOKEN => 'Nuoroda netinkama arba pasibaigusi. Paprašykite naujos.',
+            Password::INVALID_USER => 'Vartotojas nerastas.',
+            default => 'Nepavyko pakeisti slaptažodžio. Bandykite dar kartą.',
+        };
+
+        return response()->json(['zinute' => $klaidos], 422);
     }
 }

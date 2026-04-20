@@ -12,9 +12,12 @@
             <label class="label">Slaptažodis</label>
             <input v-model="form.slaptazodis" class="input mt-2" type="password" required />
           </div>
+          <div class="mt-2">
+            <router-link class="link text-sm" to="/pamirsau-slaptazodi">Pamiršai slaptažodį?</router-link>
+          </div>
           <div class="mt-5 flex items-center gap-3">
             <button class="btn btn-primary" type="submit">Prisijungti</button>
-            <a class="link text-sm" href="/registruotis">Neturi paskyros? Registruokis</a>
+            <router-link class="link text-sm" to="/registruotis">Neturi paskyros? Registruokis</router-link>
           </div>
         </form>
         <div v-if="error" class="alert alert-danger mt-4">

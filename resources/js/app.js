@@ -12,6 +12,8 @@ import Profile from './views/Profile.vue';
 import Garage from './views/Garage.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
+import ForgotPassword from './views/ForgotPassword.vue';
+import ResetPassword from './views/ResetPassword.vue';
 import CarDetail from './views/CarDetail.vue';
 import Admin from './views/Admin.vue';
 import XmlExport from './views/XmlExport.vue';
@@ -32,6 +34,8 @@ const routes = [
     { path: '/swagger', component: SwaggerRedirect, meta: { requiresAuth: true } },
     { path: '/prisijungti', component: Login },
     { path: '/registruotis', component: Register },
+    { path: '/pamirsau-slaptazodi', component: ForgotPassword },
+    { path: '/atsistatyti-slaptazodi', component: ResetPassword },
 ];
 
 const router = createRouter({

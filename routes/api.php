@@ -17,6 +17,8 @@ Route::get('/testas-swagger', fn () => response()->json(['ok' => true]));
 // Auth
 Route::post('/registruotis', [AutentifikacijaController::class, 'registruotis']);
 Route::post('/prisijungti', [AutentifikacijaController::class, 'prisijungti']);
+Route::post('/slaptazodzio-nuoroda', [AutentifikacijaController::class, 'siustiSlaptazodzioNuoroda']);
+Route::post('/slaptazodzio-keitimas', [AutentifikacijaController::class, 'nustatytiSlaptazodiIsNuorodos']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auto-renginiai/{autoRenginys}/registracijos', [\App\Http\Controllers\AutoRenginiaiController::class, 'registracijos']);
