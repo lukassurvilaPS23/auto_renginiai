@@ -10,6 +10,7 @@
             <a href="/mano-renginiai" class="btn btn-ghost">Mano</a>
             <a href="/garazas" class="btn btn-ghost">Garažas</a>
             <a href="/profilis" class="btn btn-ghost">Profilis</a>
+            <a v-if="isAdmin" href="/admin" class="btn btn-ghost">Admin</a>
             <a href="/xml" target="_blank" rel="noreferrer" class="btn btn-ghost">XML</a>
             <a href="/swagger" target="_blank" rel="noreferrer" class="btn btn-ghost">Swagger</a>
           </nav>
@@ -40,12 +41,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const isLoggedIn = ref(false);
 const user = ref(null);
+const roles = ref([]);
 const theme = ref('light');
 
 onMounted(() => {
@@ -85,11 +87,15 @@ async function fetchUser() {
   if (res.ok) {
     const data = await res.json();
     user.value = data.vartotojas;
+    roles.value = Array.isArray(data.roles) ? data.roles : [];
   } else {
     localStorage.removeItem('token');
     isLoggedIn.value = false;
+    roles.value = [];
   }
 }
+
+const isAdmin = computed(() => roles.value.includes('administratorius'));
 
 async function logout() {
   const token = localStorage.getItem('token');
@@ -103,6 +109,7 @@ async function logout() {
   localStorage.removeItem('token');
   isLoggedIn.value = false;
   user.value = null;
+  roles.value = [];
   router.push('/');
 }
 </script>

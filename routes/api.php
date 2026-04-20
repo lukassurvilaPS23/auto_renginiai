@@ -6,6 +6,7 @@ use App\Http\Controllers\AutoRenginiaiController;
 use App\Http\Controllers\RenginiuRegistracijosController;
 use App\Http\Controllers\RenginiuAtsiliepimaiController;
 use App\Http\Controllers\AutomobiliuController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/testas', function () {
     return response()->json(['ok' => true]);
@@ -26,6 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vartotojai/{userId}/aktyvumas', [AutentifikacijaController::class, 'vartotojoAktyvumas']);
     Route::get('/mano-aktyvumas', [AutentifikacijaController::class, 'vartotojoAktyvumas']);
 
+    // Admin
+    Route::get('/admin/statistika', [AdminController::class, 'statistika']);
+    Route::get('/admin/vartotojai', [AdminController::class, 'vartotojai']);
+    Route::patch('/admin/vartotojai/{user}/role', [AdminController::class, 'nustatytiRole']);
 });
 
 // Auto renginiai

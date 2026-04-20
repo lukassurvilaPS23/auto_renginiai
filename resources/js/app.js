@@ -13,6 +13,7 @@ import Garage from './views/Garage.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
 import CarDetail from './views/CarDetail.vue';
+import Admin from './views/Admin.vue';
 
 const routes = [
     { path: '/', component: Home },
@@ -24,6 +25,7 @@ const routes = [
     { path: '/profilis/:userId', component: Profile, props: true, meta: { requiresAuth: true } },
     { path: '/garazas', component: Garage, meta: { requiresAuth: true } },
     { path: '/automobiliai/:id', component: CarDetail, props: true, meta: { requiresAuth: true } },
+    { path: '/admin', component: Admin, meta: { requiresAuth: true } },
     { path: '/prisijungti', component: Login },
     { path: '/registruotis', component: Register },
 ];
