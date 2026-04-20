@@ -94,7 +94,7 @@
                     class="h-10 w-10 overflow-hidden rounded-full border"
                     :style="{ borderColor: 'var(--border)' }"
                   >
-                    <img class="h-full w-full object-cover" :src="k.vartotojas.nuotrauka" alt="Vartotojo nuotrauka" />
+                    <img class="h-full w-full object-cover" :src="storageUrl(k.vartotojas.nuotrauka)" alt="Vartotojo nuotrauka" />
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="flex flex-wrap items-center justify-between gap-2">

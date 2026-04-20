@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\NormalizesPublicStorageUrl;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Automobilis extends Model
 {
-    use HasFactory;
+    use HasFactory, NormalizesPublicStorageUrl;
 
     protected $table = 'automobiliai';
 

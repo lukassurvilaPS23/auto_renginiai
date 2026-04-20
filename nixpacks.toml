@@ -12,6 +12,7 @@ cmds = [
 cmds = [
   "npm run build",
   "php artisan optimize:clear",
+  "mkdir -p storage/app/public/renginiu-nuotraukos storage/app/public/profilio-nuotraukos storage/app/public/automobiliai",
   "php artisan storage:link || true",
   "php artisan config:cache",
   "php artisan route:cache",
