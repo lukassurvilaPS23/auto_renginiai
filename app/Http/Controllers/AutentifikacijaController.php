@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Illuminate\Validation\ValidationException;
 use OpenApi\Annotations as OA;
 
@@ -58,6 +59,7 @@ class AutentifikacijaController extends Controller
             'password' => Hash::make($data['slaptazodis']),
         ]);
 
+        Role::firstOrCreate(['name' => 'vartotojas']);
         $user->assignRole('vartotojas');
 
         $token = $user->createToken('api')->plainTextToken;
