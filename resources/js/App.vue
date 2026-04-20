@@ -1,0 +1,110 @@
+<template>
+  <div>
+    <header class="sticky top-0 z-50 border-b" :style="{ borderColor: 'var(--border)', background: 'var(--surface)' }">
+      <div class="container-app">
+        <div class="flex h-16 items-center gap-3">
+          <a href="/" class="font-semibold tracking-tight">Auto renginiai</a>
+
+          <nav class="hidden items-center gap-1 md:flex">
+            <a href="/renginiai" class="btn btn-ghost">Renginiai</a>
+            <a href="/mano-renginiai" class="btn btn-ghost">Mano</a>
+            <a href="/garazas" class="btn btn-ghost">Garažas</a>
+            <a href="/profilis" class="btn btn-ghost">Profilis</a>
+            <a href="/xml" target="_blank" rel="noreferrer" class="btn btn-ghost">XML</a>
+            <a href="/swagger" target="_blank" rel="noreferrer" class="btn btn-ghost">Swagger</a>
+          </nav>
+
+          <div class="ml-auto flex items-center gap-2">
+            <button class="btn" @click="toggleTheme" type="button">
+              <span class="hidden sm:inline">Tema</span>
+              <span class="kbd">{{ theme === 'dark' ? 'Dark' : 'Light' }}</span>
+            </button>
+
+            <template v-if="isLoggedIn">
+              <span class="hidden text-sm sm:inline muted">{{ user?.name }}</span>
+              <button class="btn btn-primary" @click="logout" type="button">Atsijungti</button>
+            </template>
+            <template v-else>
+              <a href="/prisijungti" class="btn">Prisijungti</a>
+              <a href="/registruotis" class="btn btn-primary">Registruotis</a>
+            </template>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container-app page min-h-[calc(100vh-4rem)]">
+      <router-view />
+    </main>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const isLoggedIn = ref(false);
+const user = ref(null);
+const theme = ref('light');
+
+onMounted(() => {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark' || saved === 'light') {
+    theme.value = saved;
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    theme.value = 'dark';
+  }
+  applyTheme();
+
+  const token = localStorage.getItem('token');
+  if (token) {
+    isLoggedIn.value = true;
+    fetchUser();
+  }
+});
+
+function applyTheme() {
+  document.documentElement.classList.toggle('dark', theme.value === 'dark');
+  localStorage.setItem('theme', theme.value);
+}
+
+function toggleTheme() {
+  theme.value = theme.value === 'dark' ? 'light' : 'dark';
+  applyTheme();
+}
+
+async function fetchUser() {
+  const token = localStorage.getItem('token');
+  const res = await fetch('/api/as', {
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (res.ok) {
+    const data = await res.json();
+    user.value = data.vartotojas;
+  } else {
+    localStorage.removeItem('token');
+    isLoggedIn.value = false;
+  }
+}
+
+async function logout() {
+  const token = localStorage.getItem('token');
+  await fetch('/api/atsijungti', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  localStorage.removeItem('token');
+  isLoggedIn.value = false;
+  user.value = null;
+  router.push('/');
+}
+</script>
+
+<style scoped></style>

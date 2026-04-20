@@ -1,0 +1,581 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Auto renginiai API",
+        "description": "Auto renginių, registracijų ir autentifikacijos API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Lokali aplinka"
+        }
+    ],
+    "paths": {
+        "/api/registruotis": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Vartotojo registracija ir tokeno gavimas",
+                "operationId": "2bf7b2ba876d503547ba0205a0df37aa",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "vardas",
+                                    "el_pastas",
+                                    "slaptazodis"
+                                ],
+                                "properties": {
+                                    "vardas": {
+                                        "type": "string",
+                                        "example": "Lukas"
+                                    },
+                                    "el_pastas": {
+                                        "type": "string",
+                                        "example": "lukas@auto.lt"
+                                    },
+                                    "slaptazodis": {
+                                        "type": "string",
+                                        "example": "slaptazodis"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sėkminga registracija",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "zinute": {
+                                            "type": "string",
+                                            "example": "Registracija sėkminga"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abc..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validacijos klaida"
+                    }
+                }
+            }
+        },
+        "/api/prisijungti": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Prisijungimas ir tokeno gavimas",
+                "operationId": "c576bc4f567ee44ca10330b575c6c9ea",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "el_pastas",
+                                    "slaptazodis"
+                                ],
+                                "properties": {
+                                    "el_pastas": {
+                                        "type": "string",
+                                        "example": "org@auto.lt"
+                                    },
+                                    "slaptazodis": {
+                                        "type": "string",
+                                        "example": "slaptazodis"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sėkmingas prisijungimas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "zinute": {
+                                            "type": "string",
+                                            "example": "Prisijungta"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abc..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validacijos klaida"
+                    }
+                }
+            }
+        },
+        "/api/atsijungti": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Atsijungti (ištrina current token)",
+                "operationId": "998d592def054d679ebf24d8740f1128",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "zinute": {
+                                            "type": "string",
+                                            "example": "Atsijungta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/as": {
+            "get": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Gauti prisijungusio vartotojo informaciją",
+                "operationId": "e04560b13175af182f5fa832f85de6c8",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auto-renginiai": {
+            "get": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Gauti auto renginių sąrašą",
+                "operationId": "7ee1cdfbe735a6096c2cde46b96f448a",
+                "parameters": [
+                    {
+                        "name": "miestas",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "statusas",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Sukurti auto renginį (organizatorius/administratorius)",
+                "operationId": "4ed694ba678750dcefd70be5160dae16",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pavadinimas",
+                                    "pradzios_data",
+                                    "miestas"
+                                ],
+                                "properties": {
+                                    "pavadinimas": {
+                                        "type": "string",
+                                        "example": "Žiemos driftas"
+                                    },
+                                    "aprasymas": {
+                                        "type": "string",
+                                        "example": "Susitikimas ir driftas"
+                                    },
+                                    "pradzios_data": {
+                                        "type": "string",
+                                        "example": "2025-12-30 18:00:00"
+                                    },
+                                    "pabaigos_data": {
+                                        "type": "string",
+                                        "example": "2025-12-30 21:00:00"
+                                    },
+                                    "miestas": {
+                                        "type": "string",
+                                        "example": "Vilnius"
+                                    },
+                                    "adresas": {
+                                        "type": "string",
+                                        "example": "Ozo g. 25"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sukurta"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    },
+                    "403": {
+                        "description": "Neturi teisių"
+                    },
+                    "422": {
+                        "description": "Validacijos klaida"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auto-renginiai/{autoRenginys}": {
+            "get": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Gauti vieną auto renginį pagal ID",
+                "operationId": "cacb90e6973d29b6fdf64a9e4ecd46b7",
+                "parameters": [
+                    {
+                        "name": "autoRenginys",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nerasta"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Atnaujinti auto renginį (savininkas arba administratorius)",
+                "operationId": "0ab988948418f50b7d2e6ba26abe2db6",
+                "parameters": [
+                    {
+                        "name": "autoRenginys",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "pavadinimas": {
+                                        "type": "string",
+                                        "example": "Atnaujintas pavadinimas"
+                                    },
+                                    "aprasymas": {
+                                        "type": "string",
+                                        "example": "Atnaujintas aprašymas"
+                                    },
+                                    "miestas": {
+                                        "type": "string",
+                                        "example": "Kaunas"
+                                    },
+                                    "adresas": {
+                                        "type": "string",
+                                        "example": "Naujas adresas"
+                                    },
+                                    "statusas": {
+                                        "type": "string",
+                                        "example": "aktyvus"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    },
+                    "403": {
+                        "description": "Neturi teisių"
+                    },
+                    "404": {
+                        "description": "Nerasta"
+                    },
+                    "422": {
+                        "description": "Validacijos klaida"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Ištrinti auto renginį (savininkas arba administratorius)",
+                "operationId": "2cac8a75be635cd6c187443b899d9805",
+                "parameters": [
+                    {
+                        "name": "autoRenginys",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    },
+                    "403": {
+                        "description": "Neturi teisių"
+                    },
+                    "404": {
+                        "description": "Nerasta"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auto-renginiai/{autoRenginys}/registracijos": {
+            "get": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Peržiūrėti registracijas į konkretų renginį (organizatorius arba administratorius)",
+                "operationId": "ab8800f3288d3d8afb676b7d622c6736",
+                "parameters": [
+                    {
+                        "name": "autoRenginys",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    },
+                    "403": {
+                        "description": "Neturi teisių"
+                    },
+                    "404": {
+                        "description": "Renginys nerastas"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auto-renginiai/export.xml": {
+            "get": {
+                "tags": [
+                    "Auto renginiai"
+                ],
+                "summary": "Eksportuoti auto renginius į XML",
+                "operationId": "653fdebc6843c980a49e289497f73635",
+                "responses": {
+                    "200": {
+                        "description": "XML",
+                        "content": {
+                            "application/xml": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auto-renginiai/{autoRenginys}/registracija": {
+            "post": {
+                "tags": [
+                    "Registracijos"
+                ],
+                "summary": "Užsiregistruoti į auto renginį",
+                "operationId": "eaaf1d7b3cdd1e31e174c58e1003ab22",
+                "parameters": [
+                    {
+                        "name": "autoRenginys",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Registracija sėkminga"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    },
+                    "404": {
+                        "description": "Renginys nerastas"
+                    },
+                    "422": {
+                        "description": "Negalima registruotis / validacija"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Registracijos"
+                ],
+                "summary": "Atšaukti registraciją į auto renginį",
+                "operationId": "3042a47e494a764468183075e7c40671",
+                "parameters": [
+                    {
+                        "name": "autoRenginys",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Registracija atšaukta"
+                    },
+                    "401": {
+                        "description": "Neprisijungęs"
+                    },
+                    "404": {
+                        "description": "Registracijos nerasta"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autentifikacija",
+            "description": "Registracija, prisijungimas, profilis ir atsijungimas"
+        },
+        {
+            "name": "Registracijos",
+            "description": "Registracija į auto renginius ir registracijos atšaukimas"
+        },
+        {
+            "name": "Auto renginiai",
+            "description": "Auto renginiai"
+        }
+    ]
+}

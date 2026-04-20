@@ -1,0 +1,208 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    /* Neutrals */
+    --bg: #f8fafc; /* slate-50-ish */
+    --surface: #ffffff;
+    --surface-2: #f1f5f9;
+    --text: #0f172a; /* slate-900 */
+    --muted: #64748b; /* slate-500 */
+    --border: rgba(15, 23, 42, 0.12);
+
+    /* Brand */
+    --primary: #2563eb; /* blue-600 */
+    --primary-700: #1d4ed8;
+    --primary-foreground: #ffffff;
+
+    /* Status */
+    --danger: #dc2626;
+    --danger-foreground: #ffffff;
+
+    /* Effects */
+    --ring: rgba(37, 99, 235, 0.35);
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 18px 55px rgba(15, 23, 42, 0.14);
+}
+
+html.dark {
+    --bg: #0b1220;
+    --surface: #0f172a;
+    --surface-2: #111c33;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.12);
+
+    --primary: #60a5fa; /* blue-400 */
+    --primary-700: #3b82f6;
+    --primary-foreground: #0b1220;
+    --ring: rgba(96, 165, 250, 0.42);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 18px 55px rgba(0, 0, 0, 0.45);
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+    }
+
+    body {
+        @apply antialiased;
+    }
+
+    a {
+        color: inherit;
+    }
+}
+
+@layer components {
+    .container-app {
+        @apply mx-auto w-full max-w-5xl px-4;
+    }
+
+    .page {
+        @apply py-6 sm:py-8;
+    }
+
+    .page-title {
+        @apply text-2xl font-semibold tracking-tight;
+    }
+
+    .muted {
+        color: var(--muted);
+    }
+
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        @apply rounded-2xl p-4 sm:p-5;
+    }
+
+    .card-flat {
+        box-shadow: none;
+    }
+
+    .btn {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition outline-none;
+    }
+
+    .btn:hover {
+        background: var(--surface-2);
+    }
+
+    .btn:focus-visible {
+        box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    .btn-primary {
+        border-color: transparent;
+        background: var(--primary);
+        color: var(--primary-foreground);
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-700);
+    }
+
+    .btn-ghost {
+        background: transparent;
+    }
+
+    .btn-ghost:hover {
+        background: var(--surface-2);
+    }
+
+    .input,
+    .select,
+    .textarea {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        @apply w-full rounded-xl px-3 py-2 text-sm outline-none transition;
+    }
+
+    .input::placeholder,
+    .textarea::placeholder {
+        color: var(--muted);
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+        box-shadow: 0 0 0 4px var(--ring);
+        border-color: rgba(37, 99, 235, 0.3);
+    }
+
+    .label {
+        @apply text-sm font-medium;
+        color: var(--text);
+    }
+
+    .link {
+        @apply font-medium underline-offset-4;
+        color: var(--primary);
+    }
+
+    .link:hover {
+        @apply underline;
+    }
+
+    .badge {
+        background: color-mix(in srgb, var(--primary) 10%, transparent);
+        color: var(--primary);
+        border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium;
+    }
+
+    .alert {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        @apply rounded-2xl p-4 text-sm;
+    }
+
+    .alert-danger {
+        border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+        background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+        color: var(--text);
+    }
+
+    .kbd {
+        border: 1px solid var(--border);
+        background: var(--surface-2);
+        @apply rounded-lg px-2 py-1 text-xs;
+    }
+}
+
+/* Leaflet.Draw: smaller edit handles (square points) */
+.leaflet-div-icon.leaflet-editing-icon {
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: -5px !important;
+    margin-top: -5px !important;
+    border-radius: 3px;
+}
+
+.leaflet-touch .leaflet-div-icon.leaflet-editing-icon {
+    width: 12px !important;
+    height: 12px !important;
+    margin-left: -6px !important;
+    margin-top: -6px !important;
+}
