@@ -1,7 +1,10 @@
 <template>
   <div>
     <h1 class="page-title">Mano renginiai</h1>
-    <p class="muted mt-2 text-sm">Šis puslapis veiks, jei esi prisijungęs ir turi teises kurti/valdyti renginius.</p>
+    <p class="muted mt-2 text-sm">
+      Šis puslapis veiks, jei esi prisijungęs ir turi teises kurti/valdyti renginius.
+      <span v-if="isAdmin">Kaip administratorius gali moderuoti visus renginius.</span>
+    </p>
 
     <div class="card mt-4">
       <h3 class="text-base font-semibold">Kur aš užsiregistravau</h3>
@@ -162,7 +165,7 @@
       <p v-if="loading" class="muted text-sm">Kraunama...</p>
       <p v-else-if="!mine.length" class="muted text-sm">Neturi sukurtų renginių.</p>
       <div v-else>
-        <h3 class="text-base font-semibold">Mano sukurti renginiai</h3>
+        <h3 class="text-base font-semibold">{{ isAdmin ? 'Visi renginiai (moderavimas)' : 'Mano sukurti renginiai' }}</h3>
         <div class="mt-3 divide-y" :style="{ borderColor: 'var(--border)' }">
           <div v-for="r in mine" :key="r.id" class="py-4">
             <div class="flex flex-wrap items-start justify-between gap-3">
@@ -196,6 +199,7 @@ import EventMap from '../EventMap.vue';
 const router = useRouter();
 const loading = ref(true);
 const mine = ref([]);
+const isAdmin = ref(false);
 const manoRegistracijos = ref({ loading: true, list: [] });
 const form = ref({
   editId: '',
@@ -229,6 +233,8 @@ onMounted(async () => {
   }
   const meData = await meRes.json();
   const myId = meData.vartotojas?.id ?? meData.id ?? null;
+  const roles = Array.isArray(meData.roles) ? meData.roles : [];
+  isAdmin.value = roles.includes('administratorius');
 
   const myRegRes = await fetch('/api/mano-registracijos', {
     headers: {
@@ -250,7 +256,7 @@ onMounted(async () => {
   if (res.ok) {
     const data = await res.json();
     const all = data.auto_renginiai || [];
-    mine.value = myId ? all.filter(r => Number(r.organizatorius_id) === Number(myId)) : [];
+    mine.value = isAdmin.value ? all : (myId ? all.filter(r => Number(r.organizatorius_id) === Number(myId)) : []);
   }
   loading.value = false;
 });
