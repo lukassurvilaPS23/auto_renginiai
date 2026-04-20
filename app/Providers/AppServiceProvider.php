@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (!app()->runningInConsole() && app()->environment('production')) {
+            $forwardedProto = request()->header('x-forwarded-proto');
+            $shouldForceHttps = $forwardedProto === 'https' || env('FORCE_HTTPS', true);
+
+            if ($shouldForceHttps) {
+                URL::forceScheme('https');
+            }
+        }
     }
 }
