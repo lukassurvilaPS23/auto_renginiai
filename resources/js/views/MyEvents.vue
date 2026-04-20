@@ -32,7 +32,7 @@
               <span class="badge">{{ x.statusas }}</span>
             </td>
             <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
-              <button class="btn" type="button" v-if="x.statusas === 'laukia'" @click="atsauktiManoRegistracija(x.auto_renginys?.id)">
+              <button class="btn" type="button" v-if="x.statusas === 'laukia' || x.statusas === 'patvirtinta'" @click="atsauktiManoRegistracija(x.auto_renginys?.id)">
                 Atšaukti
               </button>
               <span v-else class="muted">—</span>
@@ -167,6 +167,9 @@
                   <button class="btn btn-primary" type="button" @click="patvirtintiRegistracija(x.id)">Patvirtinti</button>
                   <button class="btn" type="button" @click="atsauktiRegistracija(x.id)">Atšaukti</button>
                 </div>
+              </template>
+              <template v-else-if="x.statusas === 'patvirtinta'">
+                <button class="btn" type="button" @click="atsauktiRegistracija(x.id)">Atšaukti</button>
               </template>
               <span v-else class="muted">—</span>
             </td>
@@ -311,9 +314,49 @@ function edit(r) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function onPhotosSelected(e) {
-  const files = Array.from(e?.target?.files || []);
-  selectedPhotos.value = files.slice(0, 5);
+async function onPhotosSelected(e) {
+  const files = Array.from(e?.target?.files || []).slice(0, 5);
+  selectedPhotos.value = await Promise.all(files.map((f) => downscaleImage(f)));
+}
+
+async function downscaleImage(file) {
+  try {
+    const img = await fileToImage(file);
+    const maxSide = 1400;
+    const ratio = Math.min(1, maxSide / Math.max(img.width, img.height));
+    const w = Math.max(1, Math.round(img.width * ratio));
+    const h = Math.max(1, Math.round(img.height * ratio));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return file;
+    ctx.drawImage(img, 0, 0, w, h);
+
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+    if (!blob) return file;
+    const nameBase = String(file.name || 'nuotrauka').replace(/\.[^/.]+$/, '');
+    return new File([blob], `${nameBase}.jpg`, { type: 'image/jpeg' });
+  } catch {
+    return file;
+  }
+}
+
+function fileToImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = (e) => {
+      URL.revokeObjectURL(url);
+      reject(e);
+    };
+    img.src = url;
+  });
 }
 
 async function del(id) {
@@ -347,14 +390,18 @@ async function save() {
   const url = form.value.editId ? `/api/auto-renginiai/${form.value.editId}` : '/api/auto-renginiai';
   const method = form.value.editId ? 'PUT' : 'POST';
   const hasPhotos = Array.isArray(selectedPhotos.value) && selectedPhotos.value.length > 0;
+  const uploadMethod = hasPhotos && method === 'PUT' ? 'POST' : method;
   const res = await fetch(url, hasPhotos ? {
-    method,
+    method: uploadMethod,
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: (() => {
       const fd = new FormData();
+      if (method === 'PUT') {
+        fd.set('_method', 'PUT');
+      }
       for (const [k, v] of Object.entries(data)) {
         if (v === undefined || v === null) continue;
         if (k === 'zemelapio_objektai') {

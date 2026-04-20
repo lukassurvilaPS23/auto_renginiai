@@ -131,7 +131,8 @@ class RenginiuRegistracijosController extends Controller
             return response()->json(['zinute' => 'Registracijos nerasta.'], 404);
         }
 
-        if ($registracija->statusas !== 'laukia') {
+        $leidziami = ['laukia', 'patvirtinta'];
+        if (!in_array($registracija->statusas, $leidziami, true)) {
             return response()->json(['zinute' => 'Registracijos atšaukti nebegalima.'], 422);
         }
 
@@ -172,7 +173,8 @@ class RenginiuRegistracijosController extends Controller
             return response()->json(['zinute' => 'Neturite teisių.'], 403);
         }
 
-        if ($registracija->statusas !== 'laukia') {
+        $leidziami = ['laukia', 'patvirtinta'];
+        if (!in_array($registracija->statusas, $leidziami, true)) {
             return response()->json(['zinute' => 'Registracijos būsenos pakeisti nebegalima.'], 422);
         }
 

@@ -21,8 +21,8 @@
         <h3 class="text-base font-semibold">Greitos nuorodos</h3>
         <ul class="mt-3 space-y-2 text-sm">
           <li><a class="link" href="/renginiai">Renginių sąrašas</a></li>
-          <li><a class="link" href="/prisijungti">Prisijungti</a></li>
-          <li><a class="link" href="/registruotis">Registruotis</a></li>
+          <li v-if="!isLoggedIn"><a class="link" href="/prisijungti">Prisijungti</a></li>
+          <li v-if="!isLoggedIn"><a class="link" href="/registruotis">Registruotis</a></li>
           <li v-if="isAdmin"><a class="link" href="/xml">XML eksportas</a></li>
           <li v-if="isAdmin"><a class="link" href="/swagger">Swagger dokumentacija</a></li>
         </ul>
@@ -88,6 +88,7 @@ const loading = ref(true);
 const calendarDate = ref(new Date());
 const weekdays = ['Pr', 'An', 'Tr', 'Kt', 'Pn', 'Št', 'Sk'];
 const roles = ref([]);
+const isLoggedIn = computed(() => Boolean(localStorage.getItem('token')));
 
 const isAdmin = computed(() => roles.value.includes('administratorius'));
 
