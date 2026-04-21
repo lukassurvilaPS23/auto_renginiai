@@ -1,6 +1,9 @@
 <template>
   <div>
-    <header class="sticky top-0 z-50 border-b" :style="{ borderColor: 'var(--border)', background: 'var(--surface)' }">
+    <header
+      class="sticky top-0 z-50 border-b transition-colors"
+      :style="{ borderColor: 'var(--header-border)', background: 'var(--header-bg)' }"
+    >
       <div class="container-app">
         <div class="flex h-16 items-center gap-3">
           <a href="/" class="font-semibold tracking-tight">Auto renginiai</a>

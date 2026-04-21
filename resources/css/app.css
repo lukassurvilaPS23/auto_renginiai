@@ -11,43 +11,55 @@
 }
 
 :root {
-    /* Neutrals */
-    --bg: #f8fafc; /* slate-50-ish */
-    --surface: #ffffff;
-    --surface-2: #f1f5f9;
-    --text: #0f172a; /* slate-900 */
-    --muted: #64748b; /* slate-500 */
-    --border: rgba(15, 23, 42, 0.12);
+    /* Palette: mahogany #6B2621 · accent #FF3B30 · burgundy #3B0000 · black #000000 */
+    --mahogany: #6b2621;
+    --burgundy: #3b0000;
+    --accent: #ff3b30;
 
-    /* Brand */
-    --primary: #2563eb; /* blue-600 */
-    --primary-700: #1d4ed8;
+    /* Neutrals (šviesus fonas su šiltu atspalviu) */
+    --bg: #faf6f5;
+    --surface: #ffffff;
+    --surface-2: #f3eceb;
+    --text: #1a1211;
+    --muted: #6b534f;
+    --border: color-mix(in srgb, var(--mahogany) 18%, transparent);
+
+    /* Brand — ryškus raudonas CTA */
+    --primary: var(--accent);
+    --primary-700: #e02e24;
     --primary-foreground: #ffffff;
 
     /* Status */
-    --danger: #dc2626;
+    --danger: #c41e16;
     --danger-foreground: #ffffff;
 
+    /* Shell */
+    --header-bg: var(--surface);
+    --header-border: var(--border);
+
     /* Effects */
-    --ring: rgba(37, 99, 235, 0.35);
-    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-    --shadow-lg: 0 18px 55px rgba(15, 23, 42, 0.14);
+    --ring: color-mix(in srgb, var(--accent) 38%, transparent);
+    --shadow: 0 10px 30px color-mix(in srgb, var(--mahogany) 12%, transparent);
+    --shadow-lg: 0 18px 55px color-mix(in srgb, var(--mahogany) 18%, transparent);
 }
 
 html.dark {
-    --bg: #0b1220;
-    --surface: #0f172a;
-    --surface-2: #111c33;
-    --text: #e5e7eb;
-    --muted: #94a3b8;
-    --border: rgba(255, 255, 255, 0.12);
+    --bg: #000000;
+    --surface: #3b0000;
+    --surface-2: #4a1515;
+    --text: #f5f0ef;
+    --muted: #c9a8a3;
+    --border: color-mix(in srgb, var(--mahogany) 45%, #000000);
 
-    --primary: #60a5fa; /* blue-400 */
-    --primary-700: #3b82f6;
-    --primary-foreground: #0b1220;
-    --ring: rgba(96, 165, 250, 0.42);
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 18px 55px rgba(0, 0, 0, 0.45);
+    --primary: var(--accent);
+    --primary-700: #ff5c52;
+    --primary-foreground: #ffffff;
+    --ring: color-mix(in srgb, var(--accent) 45%, transparent);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 18px 55px rgba(0, 0, 0, 0.65);
+
+    --header-bg: var(--mahogany);
+    --header-border: color-mix(in srgb, #000000 35%, var(--mahogany));
 }
 
 body {
@@ -148,7 +160,7 @@ body {
     .select:focus,
     .textarea:focus {
         box-shadow: 0 0 0 4px var(--ring);
-        border-color: rgba(37, 99, 235, 0.3);
+        border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
     }
 
     .label {
