@@ -65,8 +65,8 @@
       <p v-if="loading" class="muted">Kraunama...</p>
       <p v-else-if="!cars.length" class="muted">Automobilių nėra.</p>
       <div v-else>
-        <div class="divide-y" :style="{ borderColor: 'var(--border)' }">
-          <div v-for="car in cars" :key="car.id" class="py-5">
+        <div class="divide-y-2" :style="{ borderColor: 'var(--border)' }">
+          <div v-for="car in cars" :key="car.id" class="py-6 first:pt-0 last:pb-0">
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div class="min-w-0">
                 <h3 class="text-base font-semibold">{{ car.marke }} {{ car.modelis }}</h3>

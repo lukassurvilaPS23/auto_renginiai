@@ -70,35 +70,35 @@
         <table class="min-w-[920px] w-full text-sm" style="border-collapse: collapse;">
           <thead>
             <tr>
-              <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">
+              <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">
                 ID
               </th>
-              <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">
+              <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">
                 Vartotojas
               </th>
-              <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">
+              <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">
                 Rolė
               </th>
-              <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">
+              <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">
                 Sukurta
               </th>
-              <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">
+              <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">
                 Veiksmai
               </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="u in filteredUsers" :key="u.id">
-              <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">{{ u.id }}</td>
-              <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+              <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">{{ u.id }}</td>
+              <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
                 <div class="font-medium">{{ u.name }}</div>
                 <div class="muted text-xs">{{ u.email }}</div>
               </td>
-              <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+              <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
                 <span class="badge">{{ (u.roles && u.roles[0]) || '—' }}</span>
               </td>
-              <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">{{ u.sukurta || '—' }}</td>
-              <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+              <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">{{ u.sukurta || '—' }}</td>
+              <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
                 <div class="flex flex-wrap items-center gap-2">
                   <select class="select" v-model="roleDraft[u.id]">
                     <option value="vartotojas">vartotojas</option>

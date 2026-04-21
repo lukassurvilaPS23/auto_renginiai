@@ -219,7 +219,7 @@ function toDateKey(input) {
   font-size: 13px;
 }
 .calendar-cell {
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 12px;
   padding: 6px;
   min-height: 110px;
@@ -231,7 +231,7 @@ function toDateKey(input) {
 }
 .calendar-cell--today {
   border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 18%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
 }
 .calendar-day {
   font-weight: 600;

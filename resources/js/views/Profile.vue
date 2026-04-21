@@ -123,11 +123,11 @@
       <p v-if="activityLoading" class="muted mt-2 text-sm">Kraunama...</p>
       <p v-else-if="!activity.cars?.length" class="muted mt-2 text-sm">Automobilių nėra.</p>
       <div v-else>
-        <div class="mt-3 divide-y" :style="{ borderColor: 'var(--border)' }">
+        <div class="mt-3 divide-y-2" :style="{ borderColor: 'var(--border)' }">
           <div
             v-for="car in activity.cars"
             :key="car.id"
-            class="py-3 cursor-pointer"
+            class="py-4 first:pt-0 last:pb-0 cursor-pointer"
             @click="viewCarDetail(car.id)"
           >
             <div class="font-medium">{{ car.marke }} {{ car.modelis }}</div>
@@ -148,7 +148,7 @@
           <div class="mt-3 grid gap-3">
             <div v-for="k in activity.komentarai" :key="k.id" class="card card-flat">
               <div class="flex items-start gap-3">
-                <div v-if="k.vartotojas?.nuotrauka" class="h-10 w-10 overflow-hidden rounded-full border" :style="{ borderColor: 'var(--border)' }">
+                <div v-if="k.vartotojas?.nuotrauka" class="h-10 w-10 overflow-hidden rounded-full border-2" :style="{ borderColor: 'var(--border)' }">
                   <img class="h-full w-full object-cover" :src="k.vartotojas.nuotrauka" alt="Vartotojo nuotrauka" />
                 </div>
                 <div class="min-w-0 flex-1">
@@ -178,7 +178,7 @@
               </div>
 
               <a
-                class="mt-3 block overflow-hidden rounded-2xl border"
+                class="mt-3 block overflow-hidden rounded-2xl border-2"
                 :style="{ borderColor: 'var(--border)' }"
                 :href="photoHref(n)"
                 target="_blank"
@@ -200,8 +200,8 @@
 
     <div v-if="activity.renginiai?.length" class="card mt-4">
       <h3 class="text-base font-semibold">Sukurti renginiai</h3>
-      <div class="mt-3 divide-y" :style="{ borderColor: 'var(--border)' }">
-        <div v-for="r in activity.renginiai" :key="r.id" class="py-3">
+      <div class="mt-3 divide-y-2" :style="{ borderColor: 'var(--border)' }">
+        <div v-for="r in activity.renginiai" :key="r.id" class="py-4 first:pt-0 last:pb-0">
           <strong><a class="link" :href="`/renginiai/${r.id}`">{{ r.pavadinimas }}</a></strong>
           <div class="muted text-sm">{{ r.miestas }} · {{ formatDate(r.pradzios_data) }}</div>
         </div>

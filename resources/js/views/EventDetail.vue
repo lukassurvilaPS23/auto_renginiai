@@ -581,7 +581,7 @@ function formatDate(value) {
   height: 110px;
   object-fit: cover;
   border-radius: 14px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
 }
 .overlay {
   position: fixed;
@@ -634,7 +634,7 @@ function formatDate(value) {
   grid-template-columns: 1fr 2fr auto auto;
   gap: 8px;
   align-items: center;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
 }

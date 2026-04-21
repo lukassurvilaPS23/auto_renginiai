@@ -1,7 +1,7 @@
 <template>
   <div>
     <header
-      class="sticky top-0 z-50 border-b transition-colors"
+      class="sticky top-0 z-50 border-b-2 transition-colors"
       :style="{ borderColor: 'var(--header-border)', background: 'var(--header-bg)' }"
     >
       <div class="container-app">

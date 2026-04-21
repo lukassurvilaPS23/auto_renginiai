@@ -15,23 +15,23 @@
         <table class="min-w-[720px] w-full text-sm" style="border-collapse: collapse;">
         <thead>
           <tr>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Renginys</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Data</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Statusas</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Veiksmai</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Renginys</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Data</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Statusas</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="x in manoRegistracijos.list" :key="x.id">
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <a class="link" :href="`/renginiai/${x.auto_renginys?.id}`">{{ x.auto_renginys?.pavadinimas ?? '-' }}</a>
               <div class="muted mt-1 text-xs">{{ x.auto_renginys?.miestas ?? '' }}</div>
             </td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">{{ formatDate(x.auto_renginys?.pradzios_data) }}</td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">{{ formatDate(x.auto_renginys?.pradzios_data) }}</td>
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <span class="badge">{{ x.statusas }}</span>
             </td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <button class="btn" type="button" v-if="x.statusas === 'laukia' || x.statusas === 'patvirtinta'" @click="atsauktiManoRegistracija(x.auto_renginys?.id)">
                 Atšaukti
               </button>
@@ -130,28 +130,28 @@
         <table class="min-w-[920px] w-full text-sm" style="border-collapse: collapse;">
         <thead>
           <tr>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Vardas</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">El. paštas</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Data</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Statusas</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Forma</th>
-            <th class="p-3 text-left font-semibold" :style="{ borderBottom: '1px solid var(--border)', background: 'var(--surface-2)' }">Veiksmai</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Vardas</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">El. paštas</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Data</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Statusas</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Forma</th>
+            <th class="p-3 text-left font-semibold" :style="{ borderBottom: 'var(--border-width) solid var(--border)', background: 'var(--surface-2)' }">Veiksmai</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="x in registracijos.list" :key="x.id">
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <router-link v-if="x.vartotojas?.id" :to="`/profilis/${x.vartotojas.id}`">
                 <span class="link">{{ x.vartotojas?.vardas ?? '-' }}</span>
               </router-link>
               <span v-else>{{ x.vartotojas?.vardas ?? '-' }}</span>
             </td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">{{ x.vartotojas?.el_pastas ?? '-' }}</td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">{{ formatDate(x.sukurta) }}</td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">{{ x.vartotojas?.el_pastas ?? '-' }}</td>
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">{{ formatDate(x.sukurta) }}</td>
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <span class="badge">{{ x.statusas ?? '-' }}</span>
             </td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <details>
                 <summary class="cursor-pointer font-medium">Peržiūrėti</summary>
                 <div class="muted mt-2 text-xs">
@@ -169,7 +169,7 @@
                 </div>
               </details>
             </td>
-            <td class="p-3 align-top" :style="{ borderBottom: '1px solid var(--border)' }">
+            <td class="p-3 align-top" :style="{ borderBottom: 'var(--border-width) solid var(--border)' }">
               <template v-if="x.statusas === 'laukia'">
                 <div class="flex flex-wrap gap-2">
                   <button class="btn btn-primary" type="button" @click="patvirtintiRegistracija(x.id)">Patvirtinti</button>
@@ -192,8 +192,8 @@
       <p v-else-if="!mine.length" class="muted text-sm">Neturi sukurtų renginių.</p>
       <div v-else>
         <h3 class="text-base font-semibold">{{ isAdmin ? 'Visi renginiai (moderavimas)' : 'Mano sukurti renginiai' }}</h3>
-        <div class="mt-3 divide-y" :style="{ borderColor: 'var(--border)' }">
-          <div v-for="r in mine" :key="r.id" class="py-4">
+        <div class="mt-3 divide-y-2" :style="{ borderColor: 'var(--border)' }">
+          <div v-for="r in mine" :key="r.id" class="py-6 first:pt-0 last:pb-0">
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div class="min-w-0">
                 <div class="font-semibold">{{ r.pavadinimas }}</div>

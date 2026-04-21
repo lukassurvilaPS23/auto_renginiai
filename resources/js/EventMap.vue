@@ -182,7 +182,7 @@ watch(
 .map {
   width: 100%;
   height: 360px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 12px;
 }
 </style>
