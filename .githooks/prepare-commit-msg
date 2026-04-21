@@ -1,0 +1,14 @@
+#!/bin/sh
+# Pašalina Cursor attribution eilutes iš commit žinutės (veikia prieš užbaigiant commit).
+# Įjungta per: git config core.hooksPath .githooks
+
+MSG_FILE="$1"
+[ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ] || exit 0
+
+tmp="${MSG_FILE}.tmp$$"
+# Normalizuojam CRLF ir šalinam žinomus trailerius
+tr -d '\015' < "$MSG_FILE" | sed \
+  -e '/^Made-with: Cursor$/d' \
+  -e '/^Made-with: *Cursor$/d' \
+  -e '/^Co-authored-by:.*[Cc]ursor/d' \
+  > "$tmp" && mv "$tmp" "$MSG_FILE"
