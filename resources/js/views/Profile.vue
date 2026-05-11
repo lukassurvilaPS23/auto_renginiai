@@ -12,15 +12,15 @@
           <div class="md:col-span-1">
             <div
               v-if="user.nuotrauka"
-              class="overflow-hidden rounded-2xl border cursor-pointer"
+              class="profile-photo overflow-hidden rounded-2xl border cursor-pointer"
               :style="{ borderColor: 'var(--border)' }"
               @click="viewFullPhoto(user.nuotrauka)"
             >
-              <img class="h-[180px] w-full object-cover" :src="user.nuotrauka" alt="Profilio nuotrauka" />
+              <img :src="user.nuotrauka" alt="Profilio nuotrauka" />
             </div>
             <div
               v-else
-              class="flex h-[180px] items-center justify-center rounded-2xl border"
+              class="profile-photo flex items-center justify-center rounded-2xl border"
               :style="{ borderColor: 'var(--border)', background: 'var(--surface-2)', color: 'var(--muted)' }"
             >
               <span class="text-sm">Nuotrauka nėra</span>
@@ -218,6 +218,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { cropImage } from '../utils/cropImage.js';
 
 const props = defineProps({
   userId: { type: String, default: null },
@@ -274,12 +275,17 @@ const form = ref({
   nuotrauka_preview: null,
 });
 
-function handlePhotoUpload(e) {
+async function handlePhotoUpload(e) {
   const file = e.target.files[0];
-  if (file) {
-    form.value.nuotrauka = file;
-    form.value.nuotrauka_preview = URL.createObjectURL(file);
+  e.target.value = '';
+  if (!file) return;
+  const cropped = await cropImage(file, { aspectRatio: 1, outputWidth: 800 });
+  if (!cropped) return;
+  if (form.value.nuotrauka_preview) {
+    try { URL.revokeObjectURL(form.value.nuotrauka_preview); } catch (_) {}
   }
+  form.value.nuotrauka = cropped;
+  form.value.nuotrauka_preview = URL.createObjectURL(cropped);
 }
 
 const rolesDisplay = computed(() => {
@@ -441,6 +447,18 @@ function formatDate(value) {
 </script>
 
 <style scoped>
+.profile-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 280px;
+}
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .photo-overlay {
   position: fixed;
   top: 0;

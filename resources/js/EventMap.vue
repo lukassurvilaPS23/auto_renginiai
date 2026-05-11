@@ -26,7 +26,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:center']);
 
 const mapEl = ref(null);
-const drawColor = ref('#ef4444');
+const drawColor = ref('#2f8f82');
 let map;
 let drawn;
 let marker;

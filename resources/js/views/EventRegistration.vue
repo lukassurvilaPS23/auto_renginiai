@@ -62,6 +62,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { cropImages } from '../utils/cropImage.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -100,15 +101,16 @@ onMounted(async () => {
   loading.value = false;
 });
 
-function onFiles(e) {
+async function onFiles(e) {
   error.value = '';
-  const files = Array.from(e.target.files || []);
-  if (files.length > 5) {
+  const input = e?.target;
+  const raw = Array.from(input?.files || []);
+  if (input) input.value = '';
+  if (raw.length > 5) {
     error.value = 'Galima įkelti daugiausia 5 nuotraukas.';
-    selectedFiles.value = files.slice(0, 5);
-    return;
   }
-  selectedFiles.value = files;
+  const files = raw.slice(0, 5);
+  selectedFiles.value = await cropImages(files, { aspectRatio: 16 / 9, outputWidth: 1600 });
 }
 
 async function submit() {

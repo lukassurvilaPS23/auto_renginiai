@@ -99,6 +99,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { cropImage } from '../utils/cropImage.js';
 
 const cars = ref([]);
 const loading = ref(true);
@@ -142,12 +143,14 @@ async function load() {
   loading.value = false;
 }
 
-function handlePhotoUpload(e) {
+async function handlePhotoUpload(e) {
   const file = e.target.files[0];
-  if (file) {
-    form.value.nuotrauka = file;
-    form.value.nuotrauka_preview = file;
-  }
+  e.target.value = '';
+  if (!file) return;
+  const cropped = await cropImage(file, { aspectRatio: 16 / 9, outputWidth: 1600 });
+  if (!cropped) return;
+  form.value.nuotrauka = cropped;
+  form.value.nuotrauka_preview = cropped;
 }
 
 async function save() {

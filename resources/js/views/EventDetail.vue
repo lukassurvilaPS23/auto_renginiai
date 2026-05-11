@@ -186,6 +186,7 @@ import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import EventMap from '../EventMap.vue';
 import { storageUrl, normalizeStoragePaths } from '../utils/storageUrl.js';
+import { cropImages } from '../utils/cropImage.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -349,10 +350,12 @@ async function submitComment() {
   }
 }
 
-function onFilesSelected(e) {
-  const files = Array.from(e.target.files || []);
-  selectedFiles.value = files.slice(0, 5);
+async function onFilesSelected(e) {
+  const input = e?.target;
+  const files = Array.from(input?.files || []).slice(0, 5);
+  if (input) input.value = '';
   uploadMessage.value = '';
+  selectedFiles.value = await cropImages(files, { aspectRatio: 16 / 9, outputWidth: 1600 });
 }
 
 async function uploadPhotos() {

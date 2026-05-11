@@ -222,6 +222,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import EventMap from '../EventMap.vue';
 import { storageUrl, normalizeStoragePaths } from '../utils/storageUrl.js';
+import { cropImages } from '../utils/cropImage.js';
 
 const existingPhotoPaths = computed(() => normalizeStoragePaths(form.value?.nuotraukos));
 
@@ -326,8 +327,11 @@ function edit(r) {
 }
 
 async function onPhotosSelected(e) {
-  const files = Array.from(e?.target?.files || []).slice(0, 5);
-  selectedPhotos.value = await Promise.all(files.map((f) => downscaleImage(f)));
+  const input = e?.target;
+  const files = Array.from(input?.files || []).slice(0, 5);
+  if (input) input.value = '';
+  const cropped = await cropImages(files, { aspectRatio: 16 / 9, outputWidth: 1600 });
+  selectedPhotos.value = await Promise.all(cropped.map((f) => downscaleImage(f)));
 }
 
 async function downscaleImage(file) {

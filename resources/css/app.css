@@ -11,23 +11,24 @@
 }
 
 :root {
-    /* Palette: mahogany #6B2621 · accent #FF3B30 · burgundy #3B0000 · black #000000 */
-    --mahogany: #6b2621;
-    --burgundy: #3b0000;
-    --accent: #ff3b30;
+    /* Palette: sage #5BA095 · teal #2F8F82 · deep-teal #1F4D4A · night-teal #0F2D2C */
+    --sage: #5ba095;
+    --teal: #1f4d4a;
+    --teal-deep: #0f2d2c;
+    --accent: #2f8f82;
 
-    /* Neutrals (šviesus fonas su šiltu atspalviu) */
-    --bg: #faf6f5;
+    /* Neutrals (šviesus fonas su vėsiu žaliu atspalviu) */
+    --bg: #f1f7f5;
     --surface: #ffffff;
-    --surface-2: #f3eceb;
-    --text: #1a1211;
-    --muted: #6b534f;
+    --surface-2: #e3efec;
+    --text: #0e1f1e;
+    --muted: #5a726f;
     --border-width: 2px;
-    --border: color-mix(in srgb, var(--mahogany) 28%, transparent);
+    --border: color-mix(in srgb, var(--teal) 28%, transparent);
 
-    /* Brand — ryškus raudonas CTA */
+    /* Brand — ryškus žalsvas (teal) CTA */
     --primary: var(--accent);
-    --primary-700: #e02e24;
+    --primary-700: #25746a;
     --primary-foreground: #ffffff;
 
     /* Status */
@@ -40,27 +41,27 @@
 
     /* Effects */
     --ring: color-mix(in srgb, var(--accent) 38%, transparent);
-    --shadow: 0 10px 30px color-mix(in srgb, var(--mahogany) 12%, transparent);
-    --shadow-lg: 0 18px 55px color-mix(in srgb, var(--mahogany) 18%, transparent);
+    --shadow: 0 10px 30px color-mix(in srgb, var(--teal) 14%, transparent);
+    --shadow-lg: 0 18px 55px color-mix(in srgb, var(--teal-deep) 20%, transparent);
 }
 
 html.dark {
-    --bg: #000000;
-    --surface: #3b0000;
-    --surface-2: #4a1515;
-    --text: #f5f0ef;
-    --muted: #c9a8a3;
-    --border: color-mix(in srgb, var(--mahogany) 55%, #000000);
+    --bg: #0f2d2c;
+    --surface: #1f4d4a;
+    --surface-2: #2a5e5a;
+    --text: #eaf2f0;
+    --muted: #a8c3bf;
+    --border: color-mix(in srgb, var(--sage) 45%, #000000);
 
     --primary: var(--accent);
-    --primary-700: #ff5c52;
+    --primary-700: #4fb0a2;
     --primary-foreground: #ffffff;
-    --ring: color-mix(in srgb, var(--accent) 45%, transparent);
+    --ring: color-mix(in srgb, var(--sage) 50%, transparent);
     --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
     --shadow-lg: 0 18px 55px rgba(0, 0, 0, 0.65);
 
-    --header-bg: var(--mahogany);
-    --header-border: color-mix(in srgb, #000000 35%, var(--mahogany));
+    --header-bg: var(--teal);
+    --header-border: color-mix(in srgb, var(--teal-deep) 55%, var(--teal));
 }
 
 body {
