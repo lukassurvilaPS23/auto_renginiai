@@ -1,16 +1,26 @@
 <template>
   <div>
     <div class="card hero mt-2">
-      <p class="muted text-sm font-medium">Platforma entuziastams</p>
-      <h1 class="hero-title mt-2 font-semibold tracking-tight">
-        Atrask, organizuok ir valdyk auto renginius.
-      </h1>
-      <p class="mt-3 max-w-2xl text-sm sm:text-base muted">
-        Greitai susirask renginį, užsiregistruok ir sek naujienas vienoje vietoje.
-      </p>
-      <div class="mt-5 flex flex-wrap gap-3">
-        <a href="/renginiai" class="btn btn-primary">Peržiūrėti renginius</a>
-        <a href="/mano-renginiai" class="btn">Mano renginiai</a>
+      <div class="hero-content">
+        <div class="hero-text">
+          <p class="muted text-sm font-medium">Platforma entuziastams</p>
+          <h1 class="hero-title mt-2 font-semibold tracking-tight">
+            Atrask, organizuok ir valdyk auto renginius.
+          </h1>
+          <p class="mt-3 max-w-2xl text-sm sm:text-base muted">
+            Greitai susirask renginį, užsiregistruok ir sek naujienas vienoje vietoje.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="/renginiai" class="btn btn-primary">Peržiūrėti renginius</a>
+            <a href="/mano-renginiai" class="btn">Mano renginiai</a>
+          </div>
+        </div>
+        <img
+          class="hero-mark"
+          :src="theme === 'dark' ? heroMarkColorSrc : heroMarkDarkSrc"
+          alt="Motoruok"
+          aria-hidden="true"
+        />
       </div>
     </div>
 
@@ -78,7 +88,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const events = ref([]);
 const allEvents = ref([]);
@@ -88,9 +98,24 @@ const weekdays = ['Pr', 'An', 'Tr', 'Kt', 'Pn', 'Št', 'Sk'];
 const roles = ref([]);
 const isLoggedIn = computed(() => Boolean(localStorage.getItem('token')));
 
+const heroMarkDarkSrc = '/img/brand/motoruok-mark-dark.png';
+const heroMarkColorSrc = '/img/brand/motoruok-mark-color.png';
+const theme = ref('light');
+let themeObserver = null;
+
+function readTheme() {
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
 const isAdmin = computed(() => roles.value.includes('administratorius'));
 
 onMounted(async () => {
+  theme.value = readTheme();
+  themeObserver = new MutationObserver(() => {
+    theme.value = readTheme();
+  });
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
   const token = localStorage.getItem('token');
   if (token) {
     const meRes = await fetch('/api/as', {
@@ -113,6 +138,10 @@ onMounted(async () => {
     events.value = allEvents.value.slice(0, 4);
   }
   loading.value = false;
+});
+
+onUnmounted(() => {
+  themeObserver?.disconnect();
 });
 
 const eventsByDate = computed(() => {
@@ -192,14 +221,41 @@ function toDateKey(input) {
     color-mix(in srgb, var(--primary) 12%, var(--surface)),
     color-mix(in srgb, var(--primary) 6%, var(--surface))
   );
+  overflow: hidden;
+}
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hero-text {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .hero-title {
   font-size: 1.5rem;
   line-height: 1.2;
 }
+.hero-mark {
+  flex-shrink: 0;
+  width: 140px;
+  height: auto;
+  display: none;
+  transition: opacity 0.2s ease;
+  filter: drop-shadow(0 6px 20px color-mix(in srgb, var(--primary) 25%, transparent));
+}
 @media (min-width: 640px) {
   .hero-title {
     font-size: 1.875rem;
+  }
+  .hero-mark {
+    display: block;
+    width: 180px;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-mark {
+    width: 220px;
   }
 }
 
