@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Auto renginiai</h1>
+<h1>Motoruok</h1>
 
 <div class="card" style="background:linear-gradient(135deg,#eff6ff,#eef2ff); border:none; box-shadow:0 12px 25px rgba(15,23,42,0.12);">
     <div class="row" style="align-items:center;">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Auto renginiai</title>
+    <title>Motoruok</title>
 
     <style>
         body { font-family: Arial, sans-serif; margin:0; }
@@ -28,7 +28,7 @@
 <body>
 <nav>
     <a href="{{ route('pagrindinis') }}">Pagrindinis</a>
-    <a href="{{ route('renginiai') }}">Auto renginiai</a>
+    <a href="{{ route('renginiai') }}">Renginiai</a>
     <a href="{{ route('mano_renginiai') }}">Mano renginiai</a>
     <a href="{{ route('xml') }}">XML</a>
 

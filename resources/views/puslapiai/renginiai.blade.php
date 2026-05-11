@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Auto renginiai</h1>
+<h1>Renginiai</h1>
 
 <div class="card">
     <div class="row">

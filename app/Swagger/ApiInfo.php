@@ -6,9 +6,9 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(
- *   title="Auto renginiai API",
+ *   title="Motoruok API",
  *   version="1.0.0",
- *   description="Auto renginių, registracijų ir autentifikacijos API"
+ *   description="Motoruok renginių, registracijų ir autentifikacijos API"
  * )
  *
  * @OA\Server(

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">Auto renginiai</h1>
+    <h1 class="page-title">Motoruok</h1>
 
     <div class="card hero mt-4">
       <p class="muted text-sm font-medium">Platforma entuziastams</p>

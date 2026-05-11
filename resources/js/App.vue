@@ -6,7 +6,7 @@
     >
       <div class="container-app">
         <div class="flex h-16 items-center gap-3">
-          <a href="/" class="font-semibold tracking-tight">Auto renginiai</a>
+          <a href="/" class="font-semibold tracking-tight">Motoruok</a>
 
           <nav class="hidden items-center gap-1 md:flex">
             <a href="/renginiai" class="btn btn-ghost">Renginiai</a>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex flex-wrap items-center gap-3">
-      <h1 class="page-title">Auto renginiai</h1>
+      <h1 class="page-title">Renginiai</h1>
       <span class="badge" v-if="!loading">{{ list.length }} vnt.</span>
     </div>
 
