@@ -6,7 +6,18 @@
     >
       <div class="container-app">
         <div class="flex h-16 items-center gap-3">
-          <a href="/" class="font-semibold tracking-tight">Motoruok</a>
+          <a href="/" class="brand-link flex items-center" aria-label="Motoruok — į pradžią">
+            <img
+              :src="theme === 'dark' ? '/img/brand/motoruok-wordmark-light.png' : '/img/brand/motoruok-wordmark-dark.png'"
+              alt="Motoruok"
+              class="brand-wordmark hidden sm:block"
+            />
+            <img
+              :src="theme === 'dark' ? '/img/brand/motoruok-mark-light.png' : '/img/brand/motoruok-mark-dark.png'"
+              alt="Motoruok"
+              class="brand-mark sm:hidden"
+            />
+          </a>
 
           <nav class="hidden items-center gap-1 md:flex">
             <a href="/renginiai" class="btn btn-ghost">Renginiai</a>
@@ -117,4 +128,24 @@ async function logout() {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.brand-link {
+  flex-shrink: 0;
+  line-height: 0;
+}
+.brand-wordmark {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+.brand-mark {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+@media (min-width: 640px) {
+  .brand-wordmark {
+    height: 40px;
+  }
+}
+</style>

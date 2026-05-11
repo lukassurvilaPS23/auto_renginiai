@@ -1,18 +1,26 @@
 <template>
   <div>
-    <h1 class="page-title">Motoruok</h1>
-
-    <div class="card hero mt-4">
-      <p class="muted text-sm font-medium">Platforma entuziastams</p>
-      <h2 class="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight">
-        Atrask, organizuok ir valdyk auto renginius.
-      </h2>
-      <p class="mt-3 max-w-2xl text-sm sm:text-base muted">
-        Greitai susirask renginį, užsiregistruok ir sek naujienas vienoje vietoje.
-      </p>
-      <div class="mt-5 flex flex-wrap gap-3">
-        <a href="/renginiai" class="btn btn-primary">Peržiūrėti renginius</a>
-        <a href="/mano-renginiai" class="btn">Mano renginiai</a>
+    <div class="card hero mt-2">
+      <div class="hero-content">
+        <div class="hero-text">
+          <p class="muted text-sm font-medium">Platforma entuziastams</p>
+          <h1 class="hero-title mt-2 font-semibold tracking-tight">
+            Atrask, organizuok ir valdyk auto renginius.
+          </h1>
+          <p class="mt-3 max-w-2xl text-sm sm:text-base muted">
+            Greitai susirask renginį, užsiregistruok ir sek naujienas vienoje vietoje.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href="/renginiai" class="btn btn-primary">Peržiūrėti renginius</a>
+            <a href="/mano-renginiai" class="btn">Mano renginiai</a>
+          </div>
+        </div>
+        <img
+          class="hero-logo"
+          src="/img/brand/motoruok-mark-color.png"
+          alt="Motoruok"
+          aria-hidden="true"
+        />
       </div>
     </div>
 
@@ -194,6 +202,41 @@ function toDateKey(input) {
     color-mix(in srgb, var(--primary) 12%, var(--surface)),
     color-mix(in srgb, var(--primary) 6%, var(--surface))
   );
+  overflow: hidden;
+}
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.hero-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.hero-title {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+.hero-logo {
+  flex-shrink: 0;
+  width: 160px;
+  height: auto;
+  display: none;
+  filter: drop-shadow(0 6px 20px color-mix(in srgb, var(--primary) 30%, transparent));
+}
+@media (min-width: 640px) {
+  .hero-title {
+    font-size: 1.875rem;
+  }
+  .hero-logo {
+    display: block;
+    width: 180px;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-logo {
+    width: 220px;
+  }
 }
 
 .calendar-header {
