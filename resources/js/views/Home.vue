@@ -17,7 +17,7 @@
         </div>
         <img
           class="hero-mark"
-          :src="theme === 'dark' ? heroMarkColorSrc : heroMarkDarkSrc"
+          :src="theme === 'dark' ? heroMarkDarkSrc : heroMarkColorSrc"
           alt="Motoruok"
           aria-hidden="true"
         />
