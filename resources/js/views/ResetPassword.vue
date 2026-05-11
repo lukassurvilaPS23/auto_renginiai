@@ -14,11 +14,30 @@
           </div>
           <div class="mt-4">
             <label class="label">Naujas slaptažodis</label>
-            <input v-model="form.slaptazodis" class="input mt-2" type="password" required minlength="6" autocomplete="new-password" />
+            <input
+              v-model="form.slaptazodis"
+              class="input mt-2"
+              type="password"
+              required
+              minlength="8"
+              autocomplete="new-password"
+              :pattern="passwordPattern"
+              title="Bent 8 simboliai, bent 1 didžioji raidė, 1 skaičius ir 1 specialus simbolis."
+            />
+            <p class="muted mt-2 text-xs">
+              Bent 8 simboliai, bent 1 didžioji raidė, 1 skaičius ir 1 specialus simbolis (pvz. ! @ # $ %).
+            </p>
           </div>
           <div class="mt-4">
             <label class="label">Pakartok slaptažodį</label>
-            <input v-model="form.slaptazodis_confirmation" class="input mt-2" type="password" required minlength="6" autocomplete="new-password" />
+            <input
+              v-model="form.slaptazodis_confirmation"
+              class="input mt-2"
+              type="password"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            />
           </div>
           <div class="mt-5 flex flex-wrap items-center gap-3">
             <button class="btn btn-primary" type="submit" :disabled="loading">
@@ -51,6 +70,7 @@ const form = ref({
 const loading = ref(false);
 const message = ref('');
 const error = ref(false);
+const passwordPattern = '^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$';
 
 const hasParams = computed(() => !!(form.value.token && form.value.el_pastas));
 

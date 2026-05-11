@@ -22,6 +22,40 @@ use OpenApi\Annotations as OA;
 class AutentifikacijaController extends Controller
 {
     /**
+     * Slaptažodžio kūrimo / keitimo taisyklės:
+     *  - ne mažiau 8 simbolių
+     *  - bent 1 didžioji raidė
+     *  - bent 1 skaičius
+     *  - bent 1 specialus simbolis (ne raidė ir ne skaičius)
+     */
+    private function slaptazodzioTaisykles(bool $confirmed = false): array
+    {
+        $rules = [
+            'string',
+            'min:8',
+            'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/',
+        ];
+
+        if ($confirmed) {
+            $rules[] = 'confirmed';
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Bendros klaidų žinutės slaptažodžio laukui.
+     */
+    private function slaptazodzioZinutes(string $laukas): array
+    {
+        return [
+            "{$laukas}.min" => 'Slaptažodis turi būti bent 8 simbolių.',
+            "{$laukas}.regex" => 'Slaptažodis turi turėti bent vieną didžiąją raidę, vieną skaičių ir vieną specialų simbolį.',
+            "{$laukas}.confirmed" => 'Slaptažodžiai nesutampa.',
+        ];
+    }
+
+    /**
  * @OA\Post(
  *   path="/api/registruotis",
  *   tags={"Autentifikacija"},
@@ -52,8 +86,8 @@ class AutentifikacijaController extends Controller
         $data = $request->validate([
             'vardas' => 'required|string|max:255',
             'el_pastas' => 'required|email|unique:users,email',
-            'slaptazodis' => 'required|string|min:6',
-        ]);
+            'slaptazodis' => array_merge(['required'], $this->slaptazodzioTaisykles()),
+        ], $this->slaptazodzioZinutes('slaptazodis'));
 
         $user = User::create([
             'name' => $data['vardas'],
@@ -175,9 +209,9 @@ class AutentifikacijaController extends Controller
             'vardas' => 'required|string|max:255',
             'el_pastas' => 'required|email|unique:users,email,' . $user->id,
             'dabartinis_slaptazodis' => 'nullable|required_with:naujas_slaptazodis|string',
-            'naujas_slaptazodis' => 'nullable|string|min:6|confirmed',
+            'naujas_slaptazodis' => array_merge(['nullable'], $this->slaptazodzioTaisykles(true)),
             'nuotrauka' => 'nullable|image|max:10240',
-        ]);
+        ], $this->slaptazodzioZinutes('naujas_slaptazodis'));
 
         if (!empty($data['naujas_slaptazodis'])) {
             if (!Hash::check($data['dabartinis_slaptazodis'] ?? '', $user->password)) {
@@ -289,8 +323,8 @@ class AutentifikacijaController extends Controller
         $data = $request->validate([
             'el_pastas' => 'required|email',
             'token' => 'required|string',
-            'slaptazodis' => 'required|string|min:6|confirmed',
-        ]);
+            'slaptazodis' => array_merge(['required'], $this->slaptazodzioTaisykles(true)),
+        ], $this->slaptazodzioZinutes('slaptazodis'));
 
         $status = Password::reset(
             [

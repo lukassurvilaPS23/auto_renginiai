@@ -14,7 +14,19 @@
           </div>
           <div class="mt-4">
             <label class="label">Slaptažodis</label>
-            <input v-model="form.slaptazodis" class="input mt-2" type="password" required />
+            <input
+              v-model="form.slaptazodis"
+              class="input mt-2"
+              type="password"
+              required
+              minlength="8"
+              autocomplete="new-password"
+              :pattern="passwordPattern"
+              title="Bent 8 simboliai, bent 1 didžioji raidė, 1 skaičius ir 1 specialus simbolis."
+            />
+            <p class="muted mt-2 text-xs">
+              Bent 8 simboliai, bent 1 didžioji raidė, 1 skaičius ir 1 specialus simbolis (pvz. ! @ # $ %).
+            </p>
           </div>
           <div class="mt-5 flex items-center gap-3">
             <button class="btn btn-primary" type="submit">Registruotis</button>
@@ -36,6 +48,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const form = ref({ vardas: '', el_pastas: '', slaptazodis: '' });
 const error = ref('');
+const passwordPattern = '^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$';
 
 function pickFirstValidationError(errors) {
   if (!errors || typeof errors !== 'object') return '';

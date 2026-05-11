@@ -93,13 +93,30 @@
                 </div>
                 <div class="md:col-span-1">
                   <label class="label">Naujas slaptažodis</label>
-                  <input v-model="form.naujas_slaptazodis" class="input mt-2" type="password" autocomplete="new-password" />
+                  <input
+                    v-model="form.naujas_slaptazodis"
+                    class="input mt-2"
+                    type="password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    :pattern="form.naujas_slaptazodis ? passwordPattern : undefined"
+                    title="Bent 8 simboliai, bent 1 didžioji raidė, 1 skaičius ir 1 specialus simbolis."
+                  />
                 </div>
                 <div class="md:col-span-1">
                   <label class="label">Pakartok naują</label>
-                  <input v-model="form.naujas_slaptazodis_confirmation" class="input mt-2" type="password" autocomplete="new-password" />
+                  <input
+                    v-model="form.naujas_slaptazodis_confirmation"
+                    class="input mt-2"
+                    type="password"
+                    autocomplete="new-password"
+                    minlength="8"
+                  />
                 </div>
               </div>
+              <p class="muted mt-3 text-xs">
+                Naujam slaptažodžiui: bent 8 simboliai, bent 1 didžioji raidė, 1 skaičius ir 1 specialus simbolis (pvz. ! @ # $ %).
+              </p>
             </details>
 
             <div class="flex items-center gap-2">
@@ -264,6 +281,7 @@ const activity = ref({
   renginiai: [],
 });
 const isOwnProfile = computed(() => !props.userId);
+const passwordPattern = '^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$';
 
 const form = ref({
   vardas: '',
