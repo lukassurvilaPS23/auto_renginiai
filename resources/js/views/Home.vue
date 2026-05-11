@@ -17,7 +17,7 @@
         </div>
         <img
           class="hero-logo"
-          src="/img/brand/motoruok-mark-color.png"
+          :src="heroLogoSrc"
           alt="Motoruok"
           aria-hidden="true"
         />
@@ -97,6 +97,7 @@ const calendarDate = ref(new Date());
 const weekdays = ['Pr', 'An', 'Tr', 'Kt', 'Pn', 'Št', 'Sk'];
 const roles = ref([]);
 const isLoggedIn = computed(() => Boolean(localStorage.getItem('token')));
+const heroLogoSrc = '/img/brand/motoruok-mark-color.png';
 
 const isAdmin = computed(() => roles.value.includes('administratorius'));
 
