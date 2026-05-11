@@ -8,14 +8,16 @@
         <div class="flex h-16 items-center gap-3">
           <a href="/" class="brand-link flex items-center" aria-label="Motoruok — į pradžią">
             <img
-              :src="theme === 'dark' ? '/img/brand/motoruok-wordmark-light.png' : '/img/brand/motoruok-wordmark-dark.png'"
+              :src="wordmarkSrc"
               alt="Motoruok"
               class="brand-wordmark hidden sm:block"
+              :class="{ 'brand-invert': theme === 'dark' }"
             />
             <img
-              :src="theme === 'dark' ? '/img/brand/motoruok-mark-light.png' : '/img/brand/motoruok-mark-dark.png'"
+              :src="markSrc"
               alt="Motoruok"
               class="brand-mark sm:hidden"
+              :class="{ 'brand-invert': theme === 'dark' }"
             />
           </a>
 
@@ -63,6 +65,8 @@ const isLoggedIn = ref(false);
 const user = ref(null);
 const roles = ref([]);
 const theme = ref('light');
+const wordmarkSrc = '/img/brand/motoruok-wordmark-dark.png';
+const markSrc = '/img/brand/motoruok-mark-dark.png';
 
 onMounted(() => {
   const saved = localStorage.getItem('theme');
@@ -133,15 +137,16 @@ async function logout() {
   flex-shrink: 0;
   line-height: 0;
 }
-.brand-wordmark {
-  height: 36px;
-  width: auto;
-  display: block;
-}
+.brand-wordmark,
 .brand-mark {
   height: 36px;
   width: auto;
   display: block;
+  transition: filter 0.2s ease;
+}
+.brand-invert {
+  /* Juodas logo paverčiamas baltu tamsioje temoje */
+  filter: invert(1) brightness(1.05);
 }
 @media (min-width: 640px) {
   .brand-wordmark {
