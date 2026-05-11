@@ -17,6 +17,7 @@
         </div>
         <img
           class="hero-mark"
+          :class="{ 'hero-mark-invert': theme === 'dark' }"
           :src="theme === 'dark' ? heroMarkDarkSrc : heroMarkColorSrc"
           alt="Motoruok"
           aria-hidden="true"
@@ -241,8 +242,13 @@ function toDateKey(input) {
   width: 140px;
   height: auto;
   display: none;
-  transition: opacity 0.2s ease;
+  transition: filter 0.2s ease;
   filter: drop-shadow(0 6px 20px color-mix(in srgb, var(--primary) 25%, transparent));
+}
+.hero-mark-invert {
+  /* Juodas M paverčiamas baltu tamsioje temoje */
+  filter: invert(1) brightness(1.05)
+    drop-shadow(0 6px 20px color-mix(in srgb, var(--primary) 25%, transparent));
 }
 @media (min-width: 640px) {
   .hero-title {
