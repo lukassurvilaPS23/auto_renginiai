@@ -269,6 +269,11 @@ async function logoutMobile() {
 .menu-toggle:hover {
   background: var(--surface-2);
 }
+@media (min-width: 768px) {
+  .menu-toggle {
+    display: none;
+  }
+}
 .menu-toggle-bars {
   position: relative;
   width: 20px;
